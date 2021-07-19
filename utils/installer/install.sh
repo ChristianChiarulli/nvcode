@@ -41,6 +41,16 @@ installnodegentoo() {
     sudo emerge -avnN net-libs/nodejs
 }
 
+installnodegentoodoas() {
+    echo "Printing current node status..."
+    emerge -pqv net-libs/nodejs
+    echo "Make sure the npm USE flag is enabled for net-libs/nodejs"
+    echo "If it isn't enabled, would you like to enable it with flaggie? (Y/N)"
+    read answer
+    [ "$answer" != "${answer#[Yy]}" ] && doas flaggie net-libs/nodejs +npm
+    doas emerge -avnN net-libs/nodejs
+}
+
 installnode() {
     echo "Installing node..."
     [ "$(uname)" == "Darwin" ] && installnodemac
@@ -48,7 +58,14 @@ installnode() {
     [ -f "/etc/arch-release" ] && installnodearch
     [ -f "/etc/artix-release" ] && installnodearch
     [ -f "/etc/fedora-release" ] && installnodefedora
-    [ -f "/etc/gentoo-release" ] && installnodegentoo
+    [ -f "/etc/gentoo-release" ] && if ! command -v sudo &> /dev/null 
+then
+    installnodegentoodoas
+else
+    installnodegentoo 
+    fi
+
+
     [ "$(expr substr $(uname -s) 1 10)" == "MINGW64_NT" ] && echo "Windows not currently supported"
     sudo npm i -g neovim
 }
@@ -75,13 +92,22 @@ installpipongentoo() {
     sudo emerge -avn dev-python/pip
 }
 
+installpipongentoodoas() {
+    doas emerge -avn dev-python/pip
+}
+
+
 installpip() {
     echo "Installing pip..."
     [ "$(uname)" == "Darwin" ] && installpiponmac
     [ -n "$(cat /etc/os-release | grep Ubuntu)" ] && installpiponubuntu
     [ -f "/etc/arch-release" ] && installpiponarch
     [ -f "/etc/fedora-release" ] && installpiponfedora
-    [ -f "/etc/gentoo-release" ] && installpipongentoo
+    [ -f "/etc/gentoo-release" ] && if ! command -v sudo &> /dev/null 
+then
+    installpipongentoodoas 
+else installpipongentoo 
+    fi
     [ "$(expr substr $(uname -s) 1 10)" == "MINGW64_NT" ] && echo "Windows not currently supported"
 }
 
@@ -89,7 +115,13 @@ installpynvim() {
     echo "Installing pynvim..."
     if [ -f "/etc/gentoo-release" ]; then
         echo "Installing using Portage"
-        sudo emerge -avn dev-python/pynvim
+if ! command -v sudo &> /dev/null
+then
+    doas emerge -avn dev-python/pynvim
+else
+    sudo emerge -avn dev-python/pynvim
+fi
+
     else
         pip3 install pynvim --user
     fi
@@ -161,13 +193,29 @@ installongentoo() {
     npm install -g tree-sitter-cli
 }
 
+installongentoodoas() {
+    doas emerge -avn sys-apps/ripgrep app-shells/fzf app-misc/ranger dev-python/neovim-remote virtual/jpeg sys-libs/zlib
+    pipinstallueberzug
+    npm install -g tree-sitter-cli
+}
+
+checksudo() {
+if ! command -v sudo &> /dev/null
+then
+
+    installongentoodoas
+else
+    installongentoo
+fi
+
+}
 installextrapackages() {
     [ "$(uname)" == "Darwin" ] && installonmac
     [ -n "$(cat /etc/os-release | grep Ubuntu)" ] && installonubuntu
     [ -f "/etc/arch-release" ] && installonarch
     [ -f "/etc/artix-release" ] && installonarch
     [ -f "/etc/fedora-release" ] && installonfedora
-    [ -f "/etc/gentoo-release" ] && installongentoo
+    [ -f "/etc/gentoo-release" ] && checksudo
     [ "$(expr substr $(uname -s) 1 10)" == "MINGW64_NT" ] && echo "Windows not currently supported"
 }
 
@@ -210,3 +258,7 @@ fi
 
 echo "I recommend you also install and activate a font from here: https://github.com/ryanoasis/nerd-fonts"
 # echo 'export PATH=/home/$USER/.config/lunarvim/utils/bin:$PATH appending to zshrc/bashrc'
+
+
+
+
