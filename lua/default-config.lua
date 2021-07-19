@@ -14,6 +14,8 @@ O = {
   format_on_save = true,
   lint_on_save = true,
   vsnip_dir = vim.fn.stdpath "config" .. "/snippets",
+  always_trust_local_config = false,
+  never_trust_local_config = false,
 
   default_options = {
     backup = false, -- creates a backup file

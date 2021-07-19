@@ -1,19 +1,18 @@
 require "default-config"
-local status_ok, error = pcall(vim.cmd, "luafile " .. CONFIG_PATH .. "/lv-config.lua")
-if not status_ok then
-  print "something is wrong with your lv-config"
-  print(error)
-end
+
+local lv_utils = require "lv-utils"
+-- Load the user config
+lv_utils.load_user_config()
 
 require "keymappings"
 
 local plugins = require "plugins"
 local plugin_loader = require("plugin-loader").init()
 plugin_loader:load { plugins, O.user_plugins }
+
 vim.g.colors_name = O.colorscheme -- Colorscheme must get called after plugins are loaded or it will break new installs.
 
 require "settings"
-require "lv-utils"
 
 -- TODO: these guys need to be in language files
 -- require "lsp"
