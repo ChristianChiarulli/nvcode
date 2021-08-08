@@ -27,11 +27,19 @@ Make sure you have the newest version of Neovim (0.5).
 ``` bash
 bash <(curl -s https://raw.githubusercontent.com/lunarvim/lunarvim/master/utils/installer/install.sh)
 ```
+for Windows use
+``` powershell
+(Invoke-WebRequest "https://raw.githubusercontent.com/lunarvim/lunarvim/rolling/utils/installer/install.ps1" -usebasicparsing).Content | powershell
+```
 
 ### Installing
 The following command installs LunarVim.  Change `LVBRANCH` to the branch you'd like to install.  `master` for the stable branch and `rolling` for the latest changes.
 ``` bash
 LVBRANCH=rolling bash <(curl -s https://raw.githubusercontent.com/lunarvim/lunarvim/rolling/utils/installer/install.sh)
+```
+for Windows use
+``` powershell
+$LVBRANCH=rolling; (Invoke-WebRequest "https://raw.githubusercontent.com/lunarvim/lunarvim/rolling/utils/installer/install.ps1" -usebasicparsing).Content | powershell
 ```
 
 ### BREAKING CHANGE on rolling and master branches
