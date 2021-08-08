@@ -1,5 +1,18 @@
 local utils = {}
 
+function utils.save_file(format, force, quit, files)
+  if (lvim.format_on_save and format ~= false) or format then
+    vim.lsp.buf.formatting()
+  end
+
+  local bang = force and "!" or ""
+  vim.cmd("write" .. bang .. " " .. (files or ""))
+
+  if quit then
+    vim.cmd "quit"
+  end
+end
+
 -- recursive Print (structure, limit, separator)
 local function r_inspect_settings(structure, limit, separator)
   limit = limit or 100 -- default item limit
@@ -56,36 +69,12 @@ function utils.generate_settings()
   io.close(file)
 end
 
--- autoformat
-function utils.toggle_autoformat()
-  if lvim.format_on_save then
-    require("core.autocmds").define_augroups {
-      autoformat = {
-        {
-          "BufWritePre",
-          "*",
-          ":silent lua vim.lsp.buf.formatting_sync()",
-        },
-      },
-    }
-  end
-
-  if not lvim.format_on_save then
-    vim.cmd [[
-      if exists('#autoformat#BufWritePre')
-        :autocmd! autoformat
-      endif
-    ]]
-  end
-end
-
 function utils.reload_lv_config()
   vim.cmd "source ~/.local/share/lunarvim/lvim/lua/settings.lua"
   vim.cmd("source " .. USER_CONFIG_PATH)
   vim.cmd "source ~/.local/share/lunarvim/lvim/lua/plugins.lua"
   local plugins = require "plugins"
   local plugin_loader = require("plugin-loader").init()
-  utils.toggle_autoformat()
   plugin_loader:load { plugins, lvim.plugins }
   vim.cmd ":PackerCompile"
   vim.cmd ":PackerInstall"
