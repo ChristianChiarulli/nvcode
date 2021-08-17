@@ -27,7 +27,7 @@ M.config = function()
     custom_section = {
       a = {
         description = { "  Find File          " },
-        command = "Telescope find_files",
+        command = "Telescope find_files hidden=true",
       },
       b = {
         description = { "  Recently Used Files" },
@@ -64,7 +64,7 @@ M.setup = function()
 
   -- f = {
   --   description = { "  Neovim Config Files" },
-  --   command = "Telescope find_files cwd=" .. CONFIG_PATH,
+  --   command = "Telescope find_files hidden=true cwd=" .. CONFIG_PATH,
   -- },
   -- e = {description = {'  Marks              '}, command = 'Telescope marks'}
   vim.cmd 'let g:dashboard_session_directory = "~/.config/lvim/.sessions"'
@@ -77,7 +77,7 @@ M.setup = function()
     false
   )
 
-  -- file_browser = {description = {' File Browser'}, command = 'Telescope find_files'},
+  -- file_browser = {description = {' File Browser'}, command = 'Telescope find_files hidden=true'},
 
   -- vim.g.dashboard_session_directory = CACHE_PATH..'/session'
   -- vim.g.dashboard_custom_footer = lvim.dashboard.footer
