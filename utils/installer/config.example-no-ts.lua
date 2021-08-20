@@ -91,6 +91,35 @@ lvim.builtin.treesitter.highlight.enabled = true
 --     args = {}
 --   }
 -- }
+-- you can define multiple language servers
+-- make sure you disable duplicate capabilities like textDocument/formatting and textDocument/hover via handlers
+-- lvim.lang.php.lsp = {
+--   providers = {
+--     intelephense = {
+--       setup = {
+--         cmd = {
+--           DATA_PATH .. "/lspinstall/php/node_modules/.bin/intelephense",
+--           "--stdio",
+--         },
+--         filetypes = { "php", "phtml" },
+--         settings = {
+--           intelephense = {
+--             environment = {
+--               phpVersion = "7.4",
+--             },
+--           },
+--         },
+--       },
+--     },
+--     phpactor = {
+--       setup = {
+--         handlers = {
+--           ["textDocument/hover"] = function() end,
+--         },
+--       },
+--     },
+--   },
+-- }
 
 -- Additional Plugins
 -- lvim.plugins = {

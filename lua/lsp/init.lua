@@ -123,9 +123,7 @@ function M.common_on_attach(client, bufnr)
 end
 
 function M.setup(lang)
-  local lsp_utils = require "lsp.utils"
-  local lsp = lvim.lang[lang].lsp
-  if lsp_utils.is_client_active(lsp.provider) then
+  if not lvim.lang[lang] or not lvim.lang[lang].lsp then
     return
   end
 
@@ -136,9 +134,13 @@ function M.setup(lang)
     end
   end
 
-  if lsp.provider ~= nil and lsp.provider ~= "" then
-    local lspconfig = require "lspconfig"
-    lspconfig[lsp.provider].setup(lsp.setup)
+  -- initialize language server for each provider
+  local lsp_utils = require "lsp.utils"
+  local providers = lvim.lang[lang].lsp.providers
+  for name, provider in pairs(providers) do
+    if not lsp_utils.is_client_active(name) then
+      require("lspconfig")[name].setup(provider.setup)
+    end
   end
 end
 
