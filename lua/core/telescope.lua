@@ -96,7 +96,7 @@ function M.find_lunarvim_files(opts)
     },
     prompt = ">> ",
     prompt_title = "~ LunarVim files ~",
-    cwd = CONFIG_PATH,
+    cwd = LUNARVIM_RUNTIME_DIR,
     find_command = { "git", "ls-files" },
   }
   opts = vim.tbl_deep_extend("force", theme_opts, opts)
@@ -111,7 +111,7 @@ function M.grep_lunarvim_files(opts)
     layout_strategy = "bottom_pane",
     prompt = ">> ",
     prompt_title = "~ search LunarVim ~",
-    cwd = CONFIG_PATH,
+    cwd = LUNARVIM_RUNTIME_DIR,
   }
   opts = vim.tbl_deep_extend("force", theme_opts, opts)
   require("telescope.builtin").live_grep(opts)
