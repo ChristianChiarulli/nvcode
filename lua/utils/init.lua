@@ -89,10 +89,10 @@ end
 
 function utils.reload_lv_config()
   require("core.lualine").config()
-  vim.cmd("source " .. utils.join_paths(LUNARVIM_RUNTIME_DIR, "lua", "settings.lua"))
+  vim.cmd("source " .. utils.join_paths(LUNARVIM_RUNTIME_DIR, "lvim", "lua", "settings.lua"))
   vim.cmd("source " .. USER_CONFIG_PATH)
   require("keymappings").setup() -- this should be done before loading the plugins
-  vim.cmd("source " .. utils.join_paths(LUNARVIM_RUNTIME_DIR, "lua", "plugins.lua"))
+  vim.cmd("source " .. utils.join_paths(LUNARVIM_RUNTIME_DIR, "lvim", "lua", "plugins.lua"))
   local plugins = require "plugins"
   local plugin_loader = require("plugin-loader").init()
   utils.toggle_autoformat()
