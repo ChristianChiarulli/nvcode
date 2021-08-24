@@ -68,7 +68,11 @@ M.setup = function()
 
   vim.g.dashboard_session_directory = lvim.builtin.dashboard.session_directory
 
-  vim.cmd "let packages = len(globpath('~/.local/share/lunarvim/site/pack/packer/start', '*', 0, 1))"
+  vim.cmd(
+    "let packages = len(globpath('"
+      .. require("utils").join_paths(LUNARVIM_RUNTIME_DIR, "site", "pack", "packer", "start")
+      .. "', '*', 0, 1))"
+  )
 
   vim.api.nvim_exec(
     [[

@@ -4,6 +4,8 @@ stds.nvim = {
   globals = {
     "lvim",
     vim = { fields = { "g" } },
+    "LUNARVIM_RUNTIME_DIR",
+    "LUNARVIM_CONFIG_DIR",
     "CONFIG_PATH",
     "CACHE_PATH",
     "DATA_PATH",

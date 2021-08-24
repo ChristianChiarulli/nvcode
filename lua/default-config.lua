@@ -1,9 +1,26 @@
-CONFIG_PATH = os.getenv "HOME" .. "/.local/share/lunarvim/lvim"
 DATA_PATH = vim.fn.stdpath "data"
 CACHE_PATH = vim.fn.stdpath "cache"
 TERMINAL = vim.fn.expand "$TERMINAL"
 USER = vim.fn.expand "$USER"
-vim.cmd [[ set spellfile=~/.config/lvim/spell/en.utf-8.add ]]
+
+local home_dir = vim.loop.os_homedir()
+
+LUNARVIM_RUNTIME_DIR = os.getenv "LUNARVIM_RUNTIME_DIR" or home_dir .. "/.local/share/lunarvim/lvim"
+LUNARVIM_CONFIG_DIR = os.getenv "LUNARVIM_CONFIG_DIR" or home_dir .. "/.config/lvim"
+
+USER_CONFIG_PATH = LUNARVIM_CONFIG_DIR .. "/config.lua"
+local utils = require "utils"
+
+if not utils.is_file(USER_CONFIG_PATH) then
+  local fallback_config = utils.join_paths(LUNARVIM_CONFIG_DIR, "lv-config.lua")
+  if utils.is_file(fallback_config) then
+    USER_CONFIG_PATH = fallback_config
+    print("Deprecation notice: please rename your [" .. USER_CONFIG_PATH .. "] to config.lua")
+  end
+  error "Unable to load [config.lua]"
+end
+
+vim.cmd("set spellfile=" .. utils.join_paths(LUNARVIM_CONFIG_DIR, "spell", "en.utf-8.add"))
 
 lvim = {
   leader = "space",
@@ -11,8 +28,8 @@ lvim = {
   line_wrap_cursor_movement = true,
   transparent_window = false,
   format_on_save = true,
-  vsnip_dir = os.getenv "HOME" .. "/.config/snippets",
-  database = { save_location = "~/.config/lunarvim_db", auto_execute = 1 },
+  vsnip_dir = utils.join_paths(home_dir, ".config", "snippets"),
+  database = { save_location = utils.join_paths(home_dir, ".config", "lunarvim_db"), auto_execute = 1 },
   keys = {},
 
   builtin = {},
@@ -576,8 +593,7 @@ lvim.lang = {
           "julia",
           "--startup-file=no",
           "--history-file=no",
-          -- vim.fn.expand "~/.config/nvim/lua/lsp/julia/run.jl",
-          CONFIG_PATH .. "/utils/julia/run.jl",
+          LUNARVIM_RUNTIME_DIR .. "/utils/julia/run.jl",
         },
       },
     },
@@ -645,7 +661,7 @@ lvim.lang = {
             workspace = {
               -- Make the server aware of Neovim runtime files
               library = {
-                [vim.fn.expand "~/.local/share/lunarvim/lvim/lua"] = true,
+                [require("utils").join_paths(LUNARVIM_RUNTIME_DIR, "lvim", "lua")] = true,
                 [vim.fn.expand "$VIMRUNTIME/lua"] = true,
                 [vim.fn.expand "$VIMRUNTIME/lua/vim/lsp"] = true,
               },
