@@ -89,10 +89,11 @@ end
 
 function utils.reload_lv_config()
   require("core.lualine").config()
-  vim.cmd "source ~/.local/share/lunarvim/lvim/lua/settings.lua"
+
+  require "settings"
   vim.cmd("source " .. USER_CONFIG_PATH)
   require("keymappings").setup() -- this should be done before loading the plugins
-  vim.cmd "source ~/.local/share/lunarvim/lvim/lua/plugins.lua"
+  package.loaded["plugins"] = nil
   local plugins = require "plugins"
   local plugin_loader = require("plugin-loader").init()
   utils.toggle_autoformat()
