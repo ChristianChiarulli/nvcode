@@ -5,8 +5,6 @@ vim.opt.rtp:append(home_dir .. "/.local/share/lunarvim/lvim")
 
 vim.opt.rtp:remove(home_dir .. "/.config/nvim")
 vim.opt.rtp:remove(home_dir .. "/.config/nvim/after")
-vim.opt.rtp:append(home_dir .. "/.config/lvim")
-vim.opt.rtp:append(home_dir .. "/.config/lvim/after")
 
 vim.opt.rtp:remove(home_dir .. "/.local/share/nvim/site")
 vim.opt.rtp:remove(home_dir .. "/.local/share/nvim/site/after")
