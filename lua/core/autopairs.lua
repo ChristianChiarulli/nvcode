@@ -4,17 +4,19 @@ function M.config()
   lvim.builtin.autopairs = {
     active = true,
     on_config_done = nil,
-    ---@usage  map <CR> on insert mode
-    map_cr = true,
-    ---@usage auto insert after select function or method item
-    -- NOTE: This should be wrapped into a function so that it is re-evaluated when opening new files
-    map_complete = vim.bo.filetype ~= "tex",
-    ---@usage check treesitter
-    check_ts = true,
-    ts_config = {
-      lua = { "string" },
-      javascript = { "template_string" },
-      java = false,
+    config = {
+      ---@usage  map <CR> on insert mode
+      map_cr = true,
+      ---@usage auto insert after select function or method item
+      -- NOTE: This should be wrapped into a function so that it is re-evaluated when opening new files
+      map_complete = vim.bo.filetype ~= "tex",
+      ---@usage check treesitter
+      check_ts = true,
+      ts_config = {
+        lua = { "string" },
+        javascript = { "template_string" },
+        java = false,
+      },
     },
   }
 end
@@ -40,14 +42,14 @@ M.setup = function()
 
   if package.loaded["compe"] then
     require("nvim-autopairs.completion.compe").setup {
-      map_cr = lvim.builtin.autopairs.map_cr,
-      map_complete = lvim.builtin.autopairs.map_complete,
+      map_cr = lvim.builtin.autopairs.config.map_cr,
+      map_complete = lvim.builtin.autopairs.config.map_complete,
     }
   end
 
   autopairs.setup {
-    check_ts = lvim.builtin.autopairs.check_ts,
-    ts_config = lvim.builtin.autopairs.ts_config,
+    check_ts = lvim.builtin.autopairs.config.check_ts,
+    ts_config = lvim.builtin.autopairs.config.ts_config,
   }
 
   require("nvim-treesitter.configs").setup { autopairs = { enable = true } }

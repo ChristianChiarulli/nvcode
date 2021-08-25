@@ -4,52 +4,53 @@ M.config = function()
   lvim.builtin.compe = {
     active = true,
     on_config_done = nil,
-    autocomplete = true,
-    debug = false,
-    min_length = 1,
-    preselect = "enable",
-    throttle_time = 80,
-    source_timeout = 200,
-    incomplete_delay = 400,
-    max_abbr_width = 100,
-    max_kind_width = 100,
-    max_menu_width = 100,
-    documentation = {
-      border = "single",
-      winhighlight = "NormalFloat:CompeDocumentation,FloatBorder:CompeDocumentationBorder",
-      max_width = 120,
-      min_width = 60,
-      max_height = math.floor(vim.o.lines * 0.3),
-      min_height = 1,
-    },
-    -- documentation = true,
+    config = {
+      autocomplete = true,
+      debug = false,
+      min_length = 1,
+      preselect = "enable",
+      throttle_time = 80,
+      source_timeout = 200,
+      incomplete_delay = 400,
+      max_abbr_width = 100,
+      max_kind_width = 100,
+      max_menu_width = 100,
+      documentation = {
+        border = "single",
+        winhighlight = "NormalFloat:CompeDocumentation,FloatBorder:CompeDocumentationBorder",
+        max_width = 120,
+        min_width = 60,
+        max_height = math.floor(vim.o.lines * 0.3),
+        min_height = 1,
+      },
+      -- documentation = true,
 
-    source = {
-      path = { kind = "   (Path)" },
-      buffer = { kind = "   (Buffer)" },
-      calc = { kind = "   (Calc)" },
-      vsnip = { kind = "   (Snippet)" },
-      nvim_lsp = { kind = "   (LSP)" },
-      nvim_lua = false,
-      spell = { kind = "   (Spell)" },
-      tags = false,
-      vim_dadbod_completion = false,
-      snippets_nvim = false,
-      ultisnips = false,
-      treesitter = false,
-      emoji = { kind = " ﲃ  (Emoji)", filetypes = { "markdown", "text" } },
-      -- for emoji press : (idk if that in compe tho)
+      source = {
+        path = { kind = "   (Path)" },
+        buffer = { kind = "   (Buffer)" },
+        calc = { kind = "   (Calc)" },
+        vsnip = { kind = "   (Snippet)" },
+        nvim_lsp = { kind = "   (LSP)" },
+        nvim_lua = false,
+        spell = { kind = "   (Spell)" },
+        tags = false,
+        vim_dadbod_completion = false,
+        snippets_nvim = false,
+        ultisnips = false,
+        treesitter = false,
+        emoji = { kind = " ﲃ  (Emoji)", filetypes = { "markdown", "text" } },
+        -- for emoji press : (idk if that in compe tho)
+      },
     },
-
     keymap = {
       values = {
         insert_mode = {
           -- ["<Tab>"] = { 'pumvisible() ? "<C-n>" : "<Tab>"', { silent = true, noremap = true, expr = true } },
           -- ["<S-Tab>"] = { 'pumvisible() ? "<C-p>" : "<S-Tab>"', { silent = true, noremap = true, expr = true } },
-          ["<C-Space>"] = { "compe#complete()", { silent = true, noremap = true, expr = true } },
-          ["<C-e>"] = { "compe#close('<C-e>')", { silent = true, noremap = true, expr = true } },
-          ["<C-f>"] = { "compe#scroll({ 'delta': +4 })", { silent = true, noremap = true, expr = true } },
-          ["<C-d>"] = { "compe#scroll({ 'delta': -4 })", { silent = true, noremap = true, expr = true } },
+          ["<C-Space>"] = { "compe#complete()" },
+          ["<C-e>"] = { "compe#close('<C-e>')" },
+          ["<C-f>"] = { "compe#scroll({ 'delta': +4 })" },
+          ["<C-d>"] = { "compe#scroll({ 'delta': -4 })" },
         },
       },
       opts = {
@@ -64,7 +65,7 @@ M.setup = function()
 
   local compe = require "compe"
 
-  compe.setup(lvim.builtin.compe)
+  compe.setup(lvim.builtin.compe.config)
 
   local t = function(str)
     return vim.api.nvim_replace_termcodes(str, true, true, true)
