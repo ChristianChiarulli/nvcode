@@ -4,7 +4,24 @@ M.config = function()
   lvim.builtin.compe = {
     active = true,
     on_config_done = nil,
-    config = {},
+    config = {
+      source = {
+        path = { kind = "   (Path)" },
+        buffer = { kind = "   (Buffer)" },
+        calc = { kind = "   (Calc)" },
+        vsnip = { kind = "   (Snippet)" },
+        nvim_lsp = { kind = "   (LSP)" },
+        nvim_lua = false,
+        spell = { kind = "   (Spell)" },
+        tags = false,
+        vim_dadbod_completion = false,
+        snippets_nvim = false,
+        ultisnips = false,
+        treesitter = false,
+        emoji = { kind = " ﲃ  (Emoji)", filetypes = { "markdown", "text" } },
+        -- for emoji press : (idk if that in compe tho)
+      },
+    },
     keymap = {
       values = {
         insert_mode = {
@@ -14,10 +31,17 @@ M.config = function()
           ["<C-e>"] = { "compe#close('<C-e>')" },
           ["<C-f>"] = { "compe#scroll({ 'delta': +4 })" },
           ["<C-d>"] = { "compe#scroll({ 'delta': -4 })" },
+          ["<Tab>"] = { "v:lua.tab_complete()", { expr = true } },
+          ["<S-Tab>"] = { "v:lua.s_tab_complete()", { expr = true } },
+        },
+        select_mode = {
+          ["<Tab>"] = { "v:lua.tab_complete()" },
+          ["<S-Tab>"] = { "v:lua.s_tab_complete()" },
         },
       },
       opts = {
         insert_mode = { noremap = true, silent = true, expr = true },
+        select_mode = { expr = true },
       },
     },
   }
@@ -83,11 +107,6 @@ M.setup = function()
 
   local keymap = require "keymappings"
   keymap.load(lvim.builtin.compe.keymap.values, lvim.builtin.compe.keymap.opts)
-
-  vim.api.nvim_set_keymap("i", "<Tab>", "v:lua.tab_complete()", { expr = true })
-  vim.api.nvim_set_keymap("s", "<Tab>", "v:lua.tab_complete()", { expr = true })
-  vim.api.nvim_set_keymap("i", "<S-Tab>", "v:lua.s_tab_complete()", { expr = true })
-  vim.api.nvim_set_keymap("s", "<S-Tab>", "v:lua.s_tab_complete()", { expr = true })
 
   if lvim.builtin.compe.on_config_done then
     lvim.builtin.compe.on_config_done(compe)
