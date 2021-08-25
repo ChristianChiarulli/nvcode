@@ -28,13 +28,14 @@ end
 -- @param config_path The path to the configuration overrides
 function M:load(config_path)
   config_path = config_path or self.path
-  local ok, err = pcall(vim.cmd, "luafile " .. config_path)
-  if not ok then
+  local config, err = loadfile(config_path)
+  if err then
     print("Invalid configuration", config_path)
     print(err)
     return
   end
 
+  lvim = vim.tbl_deep_extend("force", lvim, config())
   self.path = config_path
 
   local settings = require "config.settings"
