@@ -54,7 +54,7 @@ INSTALL_PREFIX=/tmp/t1 LUNARVIM_CONFIG_DIR=/tmp/t2 LUNARVIM_RUNTIME_DIR=/tmp/t3 
 
 ### Debugging LunarVim's configuration
 * To turn on debugging add these settings `lvim.log.level = debug` and use `<leader>Ll` to see the options of viewing the logfiles
-* You can also use install [lnav](https://github.com/tstack/lnav) and use it in a floating terminal. Make sure to set `lvim.builtin.terminal.active = true`.
+* You can also use install [lnav](https://github.com/tstack/lnav) and use it in a floating terminal. Make sure to set `lvim.builtins.terminal.active = true`.
 
 ### Fixing installation problems
 If your installation is stuck on `Ok to remove? [y/N]`, it means there are some leftovers, \
@@ -90,7 +90,7 @@ lvim.format_on_save = true
 lvim.lint_on_save = true
 lvim.colorscheme = "spacegray"
 
-lvim.builtin.compe.autocomplete = true
+lvim.builtins.compe.autocomplete = true
 
 -- keymappings [view all the defaults by pressing <leader>Lk]
 lvim.leader = "space"
@@ -104,8 +104,8 @@ lvim.keys.normal_mode["<C-s>"] = ":w<cr>"
 -- lvim.keys.insert_mode["po"] = {'<ESC>', { noremap = true }}
 
 -- Use which-key to add extra bindings with the leader-key prefix
--- lvim.builtin.which_key.mappings["P"] = { "<cmd>Telescope projects<CR>", "Projects" }
--- lvim.builtin.which_key.mappings["t"] = {
+-- lvim.builtins.which_key.mappings["P"] = { "<cmd>Telescope projects<CR>", "Projects" }
+-- lvim.builtins.which_key.mappings["t"] = {
 --   name = "+Trouble",
 --   r = { "<cmd>Trouble lsp_references<cr>", "References" },
 --   f = { "<cmd>Trouble lsp_definitions<cr>", "Definitions" },
@@ -116,13 +116,13 @@ lvim.keys.normal_mode["<C-s>"] = ":w<cr>"
 -- }
 
 -- After changing plugin config exit and reopen LunarVim, Run :PackerInstall :PackerCompile
-lvim.builtin.dashboard.active = true
-lvim.builtin.terminal.active = true
+lvim.builtins.dashboard.active = true
+lvim.builtins.terminal.active = true
 
 -- if you don't want all the parsers change this to a table of the ones you want
-lvim.builtin.treesitter.ensure_installed = "maintained"
-lvim.builtin.treesitter.ignore_install = { "haskell" }
-lvim.builtin.treesitter.highlight.enabled = true
+lvim.builtins.treesitter.ensure_installed = "maintained"
+lvim.builtins.treesitter.ignore_install = { "haskell" }
+lvim.builtins.treesitter.highlight.enabled = true
 
 lvim.lsp.diagnostics.virtual_text = false
 
