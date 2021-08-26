@@ -51,6 +51,10 @@ for Windows use
 ``` powershell
 $LVBRANCH=rolling; (Invoke-WebRequest "https://raw.githubusercontent.com/lunarvim/lunarvim/rolling/utils/installer/install.ps1" -usebasicparsing).Content | powershell
 ```
+for Windows use
+``` powershell
+$LVBRANCH=rolling; (Invoke-WebRequest "https://raw.githubusercontent.com/lunarvim/lunarvim/rolling/utils/installer/install.ps1" -usebasicparsing).Content | powershell
+```
 
 ### BREAKING CHANGE on rolling and master branches
 * The latest changes to LunarVim require you to [remove it completely](https://github.com/lunarvim/LunarVim/wiki/Uninstalling-LunarVim) before upgrading
