@@ -1,7 +1,5 @@
-local M = {}
-
-M.config = function()
-  lvim.builtin.compe = {
+local M = {
+  defaults = {
     active = true,
     on_config_done = nil,
     config = {
@@ -44,15 +42,19 @@ M.config = function()
         select_mode = { expr = true },
       },
     },
-  }
+  },
+}
+
+function M:setup(config)
+  config:extend_with(self.defaults)
 end
 
-M.setup = function()
+function M:config()
   vim.g.vsnip_snippet_dir = lvim.vsnip_dir
 
   local compe = require "compe"
 
-  compe.setup(lvim.builtin.compe.config)
+  compe.setup(lvim.builtins.compe.config)
 
   local t = function(str)
     return vim.api.nvim_replace_termcodes(str, true, true, true)
@@ -106,10 +108,10 @@ M.setup = function()
   end
 
   local keymap = require "keymappings"
-  keymap.load(lvim.builtin.compe.keymap.values, lvim.builtin.compe.keymap.opts)
+  keymap.load(lvim.builtins.compe.keymap.values, lvim.builtins.compe.keymap.opts)
 
-  if lvim.builtin.compe.on_config_done then
-    lvim.builtin.compe.on_config_done(compe)
+  if lvim.builtins.compe.on_config_done then
+    lvim.builtins.compe.on_config_done(compe)
   end
 end
 
