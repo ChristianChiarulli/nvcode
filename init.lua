@@ -15,12 +15,46 @@ vim.opt.rtp:append(home_dir .. "/.local/share/lunarvim/site/after")
 vim.cmd [[let &packpath = &runtimepath]]
 -- }}}
 
-local config = require "config"
-config:init()
-config:load()
+local function load_config()
+  local defaults = require "config.defaults"
+  local Config = require "config"
+  local config = Config(defaults)
 
-local autocmds = require "core.autocmds"
-autocmds.define_augroups(lvim.autocommands)
+  local settings = require "config.settings"
+  settings.load_options()
+
+  local keymappings = require "config.keymappings"
+  keymappings.setup(config)
+
+  local builtins = require "core.builtins"
+  builtins.setup(config)
+
+  local autocommands_config = require "config.autocmds"
+  autocommands_config.setup(config)
+
+  -- Fallback config.lua to lv-config.lua
+  local utils = require "utils"
+  local path = string.format("%s/.config/lvim/config.lua", os.getenv "HOME")
+  if not utils.is_file(path) then
+    local lv_config = path:gsub("config.lua$", "lv-config.lua")
+    print(path, "not found, falling back to", lv_config)
+
+    path = lv_config
+  end
+
+  config:load(path)
+  settings.load_commands(config)
+
+  -- local autocmds = require "core.autocmds"
+  -- autocmds.define_augroups(config.get "autocommands")
+
+  return config
+end
+
+local config = load_config()
+-- GLOBAL configuration
+-- This varibale is required as packer cannot capture variables because it uses string.dump
+lvim = config.entries
 
 local plugins = require "plugins"
 local plugin_loader = require("plugin-loader").init()
@@ -48,7 +82,8 @@ if lsp_settings_status_ok then
   }
 end
 
-require("keymappings").setup()
+local keymap = require "keymappings"
+keymap.setup(config:get "leader", config:get("keys").entries)
 
 -- TODO: these guys need to be in language files
 -- if lvim.lang.emmet.active then
