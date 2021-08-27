@@ -27,7 +27,9 @@ Make sure you have the newest version of Neovim (0.5).
 ``` bash
 bash <(curl -s https://raw.githubusercontent.com/lunarvim/lunarvim/master/utils/installer/install.sh)
 ```
-for Windows use
+
+- Windows installer
+
 ``` powershell
 (Invoke-WebRequest "https://raw.githubusercontent.com/lunarvim/lunarvim/rolling/utils/installer/install.ps1" -usebasicparsing).Content | powershell
 ```
@@ -46,10 +48,6 @@ Putting it all together
 ``` bash
 curl -LSs https://raw.githubusercontent.com/lunarvim/lunarvim/rolling/utils/installer/install.sh -O install.sh
 INSTALL_PREFIX=/tmp/t1 LUNARVIM_CONFIG_DIR=/tmp/t2 LUNARVIM_RUNTIME_DIR=/tmp/t3 bash ./install.sh
-```
-for Windows use
-``` powershell
-$LVBRANCH=rolling; (Invoke-WebRequest "https://raw.githubusercontent.com/lunarvim/lunarvim/rolling/utils/installer/install.ps1" -usebasicparsing).Content | powershell
 ```
 
 ### BREAKING CHANGE on rolling and master branches
