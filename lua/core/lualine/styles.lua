@@ -69,7 +69,7 @@ styles.lvim = {
     icons_enabled = true,
     component_separators = "",
     section_separators = "",
-    disabled_filetypes = { "dashboard" },
+    disabled_filetypes = { "dashboard", "NvimTree", "Outline" },
   },
   sections = {
     lualine_a = {
@@ -118,7 +118,7 @@ function M.get_style(style)
       "options are: ",
       string.format('"%s"', table.concat(style_keys, '", "'))
     )
-    Log:info '"lvim" style is applied.'
+    Log:debug '"lvim" style is applied.'
     style = "lvim"
   end
 

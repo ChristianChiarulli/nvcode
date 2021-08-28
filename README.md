@@ -32,6 +32,12 @@ for Windows use
 (Invoke-WebRequest "https://raw.githubusercontent.com/lunarvim/lunarvim/rolling/utils/installer/install.ps1" -usebasicparsing).Content | powershell
 ```
 
+- Windows installer
+
+``` powershell
+(Invoke-WebRequest "https://raw.githubusercontent.com/lunarvim/lunarvim/rolling/utils/installer/install.ps1" -usebasicparsing).Content | powershell
+```
+
 ### Customizing the installation
 
 The following options are supported by setting environment variables:

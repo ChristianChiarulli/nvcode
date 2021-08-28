@@ -50,32 +50,34 @@ EOF
   echo "Detecting platform for managing any additional neovim dependencies"
   detect_platform
 
-  # skip this in a Github workflow
-  if [ -z "$GITHUB_ACTIONS" ]; then
-    check_system_deps
-
-    __add_separator "80"
-
-    echo "Would you like to check lunarvim's NodeJS dependencies?"
-    read -p "[y]es or [n]o (default: no) : " -r answer
-    [ "$answer" != "${answer#[Yy]}" ] && install_nodejs_deps
-
-    echo "Would you like to check lunarvim's Python dependencies?"
-    read -p "[y]es or [n]o (default: no) : " -r answer
-    [ "$answer" != "${answer#[Yy]}" ] && install_python_deps
-
-    echo "Would you like to check lunarvim's Rust dependencies?"
-    read -p "[y]es or [n]o (default: no) : " -r answer
-    [ "$answer" != "${answer#[Yy]}" ] && install_rust_deps
-
-    __add_separator "80"
-
-    echo "Backing up old LunarVim configuration"
-    backup_old_config
-
-    __add_separator "80"
-
+  if [ -n "$GITHUB_ACTIONS" ]; then
+    install_packer
+    setup_lvim
+    exit 0
   fi
+
+  check_system_deps
+
+  __add_separator "80"
+
+  echo "Would you like to check lunarvim's NodeJS dependencies?"
+  read -p "[y]es or [n]o (default: no) : " -r answer
+  [ "$answer" != "${answer#[Yy]}" ] && install_nodejs_deps
+
+  echo "Would you like to check lunarvim's Python dependencies?"
+  read -p "[y]es or [n]o (default: no) : " -r answer
+  [ "$answer" != "${answer#[Yy]}" ] && install_python_deps
+
+  echo "Would you like to check lunarvim's Rust dependencies?"
+  read -p "[y]es or [n]o (default: no) : " -r answer
+  [ "$answer" != "${answer#[Yy]}" ] && install_rust_deps
+
+  __add_separator "80"
+
+  echo "Backing up old LunarVim configuration"
+  backup_old_config
+
+  __add_separator "80"
 
   case "$@" in
     *--overwrite*)
@@ -209,7 +211,7 @@ function backup_old_config() {
     # that require an existing directory
     mkdir -p "$dir" "$dir.bak"
     if command -v rsync &>/dev/null; then
-      rsync --archive -hh --partial --progress \
+      rsync --archive -hh --partial --progress --cvs-exclude \
         --modify-window=1 "$dir"/ "$dir.bak"
     else
       cp -R "$dir/*" "$dir.bak/."
@@ -219,13 +221,13 @@ function backup_old_config() {
 }
 
 function install_packer() {
-  git clone --progress --depth 1 https://github.com/wbthomason/packer.nvim \
+  git clone --depth 1 https://github.com/wbthomason/packer.nvim \
     "$LUNARVIM_RUNTIME_DIR/site/pack/packer/start/packer.nvim"
 }
 
 function clone_lvim() {
   echo "Cloning LunarVim configuration"
-  if ! git clone --progress --branch "$LV_BRANCH" \
+  if ! git clone --branch "$LV_BRANCH" \
     --depth 1 "https://github.com/${LV_REMOTE}" "$LUNARVIM_RUNTIME_DIR/lvim"; then
     echo "Failed to clone repository. Installation failed."
     exit 1
@@ -258,12 +260,8 @@ function setup_lvim() {
     "$LUNARVIM_CONFIG_DIR/config.lua"
 
   nvim -u "$LUNARVIM_RUNTIME_DIR/lvim/init.lua" --headless \
-    +'autocmd User PackerComplete sleep 100m | qall' \
-    +PackerInstall
-
-  nvim -u "$LUNARVIM_RUNTIME_DIR/lvim/init.lua" --headless \
-    +'autocmd User PackerComplete sleep 100m | qall' \
-    +PackerSync
+    -c 'autocmd User PackerComplete quitall' \
+    -c 'PackerSync'
 
   echo "Packer setup complete"
 
@@ -275,8 +273,9 @@ function setup_lvim() {
 }
 
 function update_lvim() {
-  if ! git -C "$LUNARVIM_RUNTIME_DIR/lvim" status -uno &>/dev/null; then
-    git -C "$LUNARVIM_RUNTIME_DIR/lvim" pull --ff-only --progress ||
+  git -C "$LUNARVIM_RUNTIME_DIR/lvim" fetch --quiet
+  if ! git -C "$LUNARVIM_RUNTIME_DIR/lvim" diff --quiet "@{upstream}"; then
+    git -C "$LUNARVIM_RUNTIME_DIR/lvim" merge --ff-only --progress ||
       echo "Unable to guarantee data integrity while updating. Please do that manually instead." && exit 1
   fi
   echo "Your LunarVim installation is now up to date!"
